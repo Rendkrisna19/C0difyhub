@@ -1,44 +1,51 @@
+// src/components/Portfolio.jsx
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
-/**
- * Ganti konten di bawah sesuai proyekmu.
- * Untuk "img", pakai path dari public/portfolio/*.jpg
- */
-const entries = [
-  // kolom akan otomatis terbagi; urutan sesuai array ini
-  { type:'text', tag:'PORTFOLIO', title:'Kami telah berpengalaman', desc:'Menyelesaikan kebutuhan website, branding, dan digital marketing Anda.' },
-  { type:'img',  img:'/portfolio/1.jpg' },
+// === Import gambar (ganti sesuai file kamu) ===
+import p1 from '../assets/About/project1.png'
+import p2 from '../assets/About/project2.png'
+import p3 from '../assets/About/project4.png'
+import p4 from '../assets/About/project5.png'
+import p5 from '../assets/About/project4.png'
+import p6 from '../assets/About/project4.png'
+import p7 from '../assets/About/project5.png'
+import p8 from '../assets/About/project1.png'
+import p9 from '../assets/About/project4.png'
 
-  { type:'img',  img:'/portfolio/2.jpg' },
+// Konten (campur text + image)
+const entries = [
+  { type:'text', tag:'PORTFOLIO', title:'Kami telah berpengalaman', desc:'Menyelesaikan kebutuhan website, branding, dan digital marketing Anda.' },
+  { type:'img',  img:p1 },
+
+  { type:'img',  img:p2 },
   { type:'text', tag:'META ADS EROPA MOTOR', title:'Lead meningkat signifikan',
     desc:'Dengan fokus pada audien yang tepat, CPA turun dan jangkauan meningkat. Funnel yang rapi memastikan konversi & pertumbuhan bisnis.' },
 
-  { type:'img',  img:'/portfolio/3.jpg' },
+  { type:'img',  img:p3 },
   { type:'text', tag:'INSTAGRAM @DAPRA.ID', title:'Konten elegan & konsisten',
     desc:'Tone emosional untuk audience kebersihan, menekankan kenyamanan, efisiensi, serta kualitas layanan. Hasil: engagement tinggi.' },
 
   { type:'text', tag:'INSTAGRAM @DELAVAL.ID', title:'Konten premium klinik',
     desc:'Narasi berkelas untuk produk dan layanan kecantikan premium. Hasil: impresi & interaksi naik, brand positioning lebih kuat.' },
-  { type:'img',  img:'/portfolio/4.jpg' },
+  { type:'img',  img:p4 },
 
   { type:'text', tag:'SEM MULIASERVICE', title:'Search intent → konversi',
     desc:'Kampanye kata kunci bernilai tinggi & landing yang dioptimasi. Kepercayaan meningkat dan lead organik stabil.' },
-  { type:'img',  img:'/portfolio/5.jpg' },
+  { type:'img',  img:p5 },
 
   { type:'text', tag:'WEBSITE ANTARALOGISTIC.COM', title:'Informasi padat & cepat',
     desc:'Optimasi arsitektur konten + pelacakan analitik. Pengalaman pengguna meningkat, bounce turun, lead bertambah.' },
-  { type:'img',  img:'/portfolio/6.jpg' },
+  { type:'img',  img:p6 },
 
   { type:'text', tag:'WEBSITE ELKA JAYA MANDIRI', title:'Company profile modern',
     desc:'Desain modular yang mudah dikembangkan. Tim dapat mempresentasikan perusahaan dengan lebih percaya diri.' },
-  { type:'img',  img:'/portfolio/7.jpg' },
+  { type:'img',  img:p7 },
 
-  // tambah lagi sesuai kebutuhan…
-  { type:'img',  img:'/portfolio/8.jpg' },
-  { type:'img',  img:'/portfolio/9.jpg' },
+  { type:'img',  img:p8 },
+  { type:'img',  img:p9 },
 ]
 
 export default function Portfolio(){
@@ -46,10 +53,37 @@ export default function Portfolio(){
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.utils.toArray('.p-item').forEach((el) => {
-        gsap.from(el, {
-          y: 20, opacity: 0, duration: .6, ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 85%' }
+      // reveal semua card saat masuk viewport
+      gsap.utils.toArray<HTMLElement>('.p-card').forEach((card) => {
+        gsap.from(card, {
+          y: 24, opacity: 0,
+          duration: .7, ease: 'power3.out',
+          scrollTrigger: { trigger: card, start: 'top 85%' }
+        })
+      })
+
+      // Ken-Burns in-view untuk gambar
+      gsap.utils.toArray<HTMLElement>('.p-card.p-img').forEach((card) => {
+        const img = card.querySelector('img')
+        if (!img) return
+        gsap.fromTo(img,
+          { scale: 1.08 },
+          {
+            scale: 1,
+            duration: 1.2,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 85%' }
+          }
+        )
+      })
+
+      // Stagger isi text card
+      gsap.utils.toArray<HTMLElement>('.p-card .p-text').forEach((box) => {
+        const kids = Array.from(box.children)
+        gsap.from(kids, {
+          y: 14, opacity: 0,
+          duration: .5, ease: 'power2.out', stagger: .08,
+          scrollTrigger: { trigger: box, start: 'top 90%' }
         })
       })
     }, ref)
@@ -72,7 +106,9 @@ export default function Portfolio(){
             <div className="p-item" key={i}>
               {item.type === 'img' ? (
                 <article className="p-card p-img">
-                  <img src={item.img} alt={item.title || `Portfolio ${i+1}`} loading="lazy" />
+                  <figure className="p-figure">
+                    <img className="kb" src={item.img} alt={item.title || `Portfolio ${i+1}`} loading="lazy" />
+                  </figure>
                 </article>
               ) : (
                 <article className="p-card">

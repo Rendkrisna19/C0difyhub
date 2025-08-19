@@ -276,6 +276,7 @@ body{
 }
 
 /* ===== PORTFOLIO ===== */
+/* ===== PORTFOLIO (Masonry + animasi halus) ===== */
 .portfolio{
   background:#fff;
   border-top:1px solid var(--ch-border);
@@ -296,42 +297,77 @@ body{
   white-space:nowrap;
 }
 
-/* Masonry */
-.p-columns{ column-count: 3; column-gap: 16px }
+/* Masonry using CSS columns (simple & fast) */
+.p-columns{
+  column-count: 3;
+  column-gap: 16px;
+}
 .p-item{ break-inside: avoid; margin-bottom: 16px }
+
+/* Card base */
 .p-card{
   background:#fff; border:1px solid var(--ch-border); border-radius:16px; overflow:hidden;
   box-shadow: 0 12px 32px rgba(22,34,66,.06);
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.p-card:hover{ transform: translateY(-3px); box-shadow:0 18px 44px rgba(22,34,66,.10) }
-.p-img img{ width:100%; display:block }
-.p-text{ padding:16px 16px 18px }
-.p-tag{ color: var(--ch-primary); font-weight:800; margin:0 0 6px }
-.p-title{ margin:0 0 6px; font-size:18px }
+.p-card:hover{ transform: translateY(-4px); box-shadow:0 18px 44px rgba(22,34,66,.10) }
+
+/* Image card */
+.p-img{ position:relative }
+.p-figure{ position:relative; overflow:hidden }
+.p-figure::after{        /* shimmer lembut saat hover */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,17,32,.07) 90%);
+  opacity:0; transition: opacity .25s ease;
+}
+.p-card.p-img:hover .p-figure::after{ opacity:1 }
+
+.p-img img.kb{
+  width:100%; display:block;
+  transform: scale(1.03);             /* state default untuk smooth */
+  transition: transform .6s cubic-bezier(.22,.61,.36,1);
+}
+.p-card.p-img:hover img.kb{ transform: scale(1.10) }
+
+/* Text card */
+.p-text{ padding:16px 16px 20px }
+.p-tag{
+  color: var(--ch-primary);
+  font-weight:800; margin:0 0 6px;
+  letter-spacing:.2px;
+}
+.p-title{
+  margin:0 0 6px; font-size:18px; font-weight:800;
+  background:
+    linear-gradient(90deg, var(--ch-text), var(--ch-text)) 0 100%/0 2px no-repeat;
+  transition: background-size .35s ease;
+}
+.p-card:hover .p-title{ background-size: 100% 2px } /* underline anim */
+
 .p-desc{ margin:0; color:var(--ch-muted); font-size:14px; line-height:1.55 }
+
+/* Responsive columns */
 @media (max-width: 980px){ .p-columns{ column-count: 2 } }
 @media (max-width: 620px){
   .p-header{ flex-direction:column; align-items:flex-start }
   .p-columns{ column-count: 1 }
 }
 
-/* ===== CLIENTS / LOGO WALL ===== */
 /* ===== CLIENTS / LOGO WALL (marquee + glow) — BIG & FAST ===== */
 :root{
-  /* gampang diubah */
-  --logo-size-desktop: 64px;   /* tinggi logo di desktop (naikkan ke 72/80 kalau mau) */
-  --logo-size-mobile: 46px;    /* tinggi logo di hp */
-  --logo-gap: 44px;            /* jarak antar logo */
-  --logo-pad: 26px;            /* pagidding di dalam kartu logo */
-  --logo-speed: 16s;           /* durasi animasi track (lebih kecil = lebih cepat) */
+  
+  --logo-size-desktop: 64px;   
+  --logo-size-mobile: 46px;   
+  --logo-gap: 44px;            
+  --logo-pad: 26px;            
+  --logo-speed: 16s;           
 }
 
 .clients{
   background: #FAFBFF;
   border-top: 1px solid var(--ch-border);
 }
-.clients .container{ width:min(1160px,92%); margin-inline:auto; padding:84px 0 } /* lebih lega */
+.clients .container{ width:min(1160px,92%); margin-inline:auto; padding:84px 0 } 
 .clients h2{
   text-align:center; margin:0 0 34px;
   font-size: clamp(28px, 5vw, 42px);
@@ -339,7 +375,7 @@ body{
   letter-spacing: 1px;
 }
 
-/* Marquee wrapper lebih tebal */
+
 .logo-marquee{
   position: relative;
   overflow: hidden;

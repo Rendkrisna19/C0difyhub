@@ -7,8 +7,8 @@ import Portfolio from './components/Portfolio'
 import Client from './components/Clients'
 import WhatsappWidget from './components/WhatsappWidget'
 import News from './components/News'
-import SystemCTA from './components/SystemCTA'
 import Footer from './components/Footer'
+import FlowingMenuCTA from './components/FlowingMenuCTA';
 
 export default function App() {
   return (
@@ -20,11 +20,14 @@ export default function App() {
       <Portfolio />
       <Client />
       <News />
-      <SystemCTA
-        image="/cta/system.jpg"                 // path gambar real kamu
-        title="KAMI JUGA MENYEDIAKAN LAYANAN PEMBUATAN SISTEM SESUAI KEBUTUHAN ANDA"
-        buttonText="CodifyHub.co.id"
-        buttonHref="https://codifyhub.co.id"
+      <FlowingMenuCTA
+        eyebrow="CodifyHub"
+        title="Kami membangun"
+        highlight="Website & Sistem Kustom"
+        subtitle="React + Vite + GSAP • performa tinggi, UX modern, animasi halus."
+        ctaText="Chat via WhatsApp"
+        ctaHref="https://wa.me/6282275373233?text=Halo%20CodifyHub"
+        items={['MURAH', 'BERKUALITAS', 'AMANAH', 'TERPERCAYA', 'CEPAT', 'NYAMAN']}
       />
       <Footer />
       <WhatsappWidget

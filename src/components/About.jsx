@@ -1,21 +1,28 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useCallback } from 'react'
 import Particles from 'react-tsparticles'
 import { loadFull } from 'tsparticles'
 
-const imgs = [
-  '../assets/about1.jpg',
-  '../assets/about1.jpg',
-  '../assets/about1.jpg',
-  '../assets/about1.jpg',
-  '../assets/about1.jpg',
-  
-]
+// === Import gambar di sini ===
+// Ganti file sesuai yang kamu punya di /src/assets
+import img1 from '../assets/About/project1.png'
+import img2 from '../assets/About/project5.png'
+import img3 from '../assets/About/project2.png'
+import img4 from '../assets/About/project3.png'
+import img5 from '../assets/About/project4.png'
+// kalau belum punya semuanya, sementara bisa arahkan beberapa import ke file yang sama
+
+const IMAGES = [img1, img2, img3, img4, img5]
 
 export default function About(){
   const carRef = useRef(null)
 
-  // opsi particles: lembut & ringan, warna mengikuti biru CodifyHub
-  const options = useMemo(()=>({
+  // init tsparticles (wajib async)
+  const particlesInit = useCallback(async (engine) => {
+    await loadFull(engine)
+  }, [])
+
+  // opsi particles: lembut & ringan
+  const options = useMemo(() => ({
     background: { color: { value: '#ffffff' } },
     fpsLimit: 60,
     particles: {
@@ -33,19 +40,14 @@ export default function About(){
   const handlePause = (paused) => {
     const el = carRef.current
     if (!el) return
-    if (paused) el.classList.add('paused')
-    else el.classList.remove('paused')
+    el.classList.toggle('paused', paused)
   }
 
   return (
     <section id="about" className="section about" aria-label="About CodifyHub">
       {/* Particles background */}
       <div className="particles-wrap" aria-hidden>
-        <Particles
-          id="tsp"
-          init={loadFull}
-          options={options}
-        />
+        <Particles id="tsp" init={particlesInit} options={options} />
       </div>
 
       <div className="container content">
@@ -65,7 +67,7 @@ export default function About(){
               <span className="badge">Support & Garansi</span>
             </div>
 
-            <p style={{marginBottom:0}}>
+            <p style={{ marginBottom: 0 }}>
               Kami bantu dari <strong>ide</strong> → <strong>desain</strong> → <strong>launch</strong> → <strong>maintenance</strong>.
               Konsultasi gratis untuk memetakan kebutuhan bisnis Anda.
             </p>
@@ -75,15 +77,15 @@ export default function About(){
           <div
             ref={carRef}
             className="carousel"
-            onMouseEnter={()=>handlePause(true)}
-            onMouseLeave={()=>handlePause(false)}
-            onTouchStart={()=>handlePause(true)}
-            onTouchEnd={()=>handlePause(false)}
+            onMouseEnter={() => handlePause(true)}
+            onMouseLeave={() => handlePause(false)}
+            onTouchStart={() => handlePause(true)}
+            onTouchEnd={() => handlePause(false)}
           >
             <div className="carousel-track">
               {/* duplikasi 2x untuk loop mulus */}
-              {[...imgs, ...imgs].map((src, i)=>(
-                <img key={i} src={src} alt={`Showcase ${i%imgs.length + 1}`} loading="lazy" />
+              {[...IMAGES, ...IMAGES].map((src, i) => (
+                <img key={i} src={src} alt={`Showcase ${i % IMAGES.length + 1}`} loading="lazy" />
               ))}
             </div>
           </div>
